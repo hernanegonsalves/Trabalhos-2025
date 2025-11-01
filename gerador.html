@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gera senhas</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+   
+    <style>
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #363434;
+                color: #e0e0e0;
+                margin: 0;
+                padding: 0;
+                backdrop-filter: blur(10px);
+            }
+            input, button, textarea {
+                background: #2d2d2d;
+                color: white;
+                border: 1px solid #444;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="titulo">Gerador de senhas</h1>
+    <div class="centro">
+        <label class="numero" for="tamanho">N° de caracteres</label>
+        <input class="pedido" type="number" id="tamanho" min="8" max="256" placeholder="8-256">
+        <button class="botao" id="botaoGerar">gerar</button>
+        
+        <textarea class="senha" id="SenhaGerada" readonly placeholder="Sua senha aparecerá aqui..."></textarea>
+        <button class="BotaoCopia" id="botaoCopiar">copiar</button>
+    </div>
+   
+    <script>
+        const tamanhoInput = document.getElementById("tamanho");
+        const senhaOutput = document.getElementById("SenhaGerada");
+        const botaoGerar = document.getElementById("botaoGerar");
+        const botaoCopiar = document.getElementById("botaoCopiar");
+
+        function gera_senhas() {
+            const tamanhoStr = tamanhoInput.value.trim();
+            const tamanho = Number(tamanhoStr);
+
+            if (!tamanhoStr || isNaN(tamanho) || tamanho < 8 || tamanho > 256) {
+                senhaOutput.value = "Valor inválido! Use de 8 a 256 caracteres.";
+                return;
+            }
+
+            const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+            let senha = '';
+            for (let i = 0; i < tamanho; i++) {
+                const aleatorio = Math.floor(Math.random() * caracteres.length);
+                senha += caracteres[aleatorio];
+            }
+            senhaOutput.value = senha;
+        }
+
+        function copiarSenha() {
+            if (!senhaOutput.value || senhaOutput.value.includes("inválido")) {
+                alert("Nada para copiar!");
+                return;
+            }
+
+            navigator.clipboard.writeText(senhaOutput.value)
+                .then(() => {
+                    botaoCopiar.textContent = "copiado!";
+                    setTimeout(() => {
+                        botaoCopiar.textContent = "copiar";
+                    }, 2000);
+                })
+                .catch(err => {
+                    alert("Falha ao copiar: " + err);
+                });
+        }
+
+        // Eventos
+        botaoGerar.addEventListener("click", gera_senhas);
+        botaoCopiar.addEventListener("click", copiarSenha);
+
+        // Enter no input
+        tamanhoInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                gera_senhas();
+            }
+        });
+
+        // Garante que o DOM está carregado
+        document.addEventListener("DOMContentLoaded", () => {
+            // Qualquer inicialização extra aqui, se necessário
+        });
+    </script>
+
+    <style>
+        .titulo {
+            padding-top: 1px;
+            font-size: 70px;
+            text-align: center;
+            font-family: "Electrolize", sans-serif;
+            margin: 20px 0;
+        }
+        .pedido {
+            height: 70px;
+            width: 222px;
+            border-radius: 20px;
+            font-size: 60px;
+            text-align: center;
+            padding: 0 10px;
+        }
+        .centro {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            gap: 15px;
+        }
+        .senha {
+            border-radius: 30px;
+            height: 250px;
+            font-size: 25px;
+            color: #e0e0e0;
+            text-align: center;
+            width: 50%;
+            min-width: 300px;
+            padding: 20px;
+            background-color: #444;
+            border: 1px solid #555;
+            resize: none;
+            font-family: monospace;
+        }
+        .botao, .BotaoCopia {
+            border-radius: 25px;
+            font-size: 40px;
+            padding: 10px 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: "Orbitron", sans-serif;
+        }
+        .botao:hover, .BotaoCopia:hover {
+            background: #444;
+            transform: scale(1.05);
+        }
+        .numero {
+            font-size: 30px;
+            font-family: "Oxanium", sans-serif;
+        }
+
+
+        
+    </style>
+</body>
+</html>
