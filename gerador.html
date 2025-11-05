@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de senhas</title>
+    <title>Gera senhas</title>
     <link rel="stylesheet" href="normalize.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,6 +28,8 @@
                 border: 1px solid #444;
             }
         }
+
+        /*^ muda as cores se o tema for claro ou escuro ^*/
     </style>
 </head>
 <body>
@@ -42,17 +44,17 @@
     </div>
    
     <script>
-        const tamanhoInput = document.getElementById("tamanho");
-        const senhaOutput = document.getElementById("SenhaGerada");
-        const botaoGerar = document.getElementById("botaoGerar");
-        const botaoCopiar = document.getElementById("botaoCopiar");
+        const tamanhoInput = document.getElementById("tamanho"); // pega qtos caracteres o usuario quer
+        const senhaOutput = document.getElementById("SenhaGerada"); //mostra a senha gerada
+        const botaoGerar = document.getElementById("botaoGerar"); // gera a senha
+        const botaoCopiar = document.getElementById("botaoCopiar"); // copia a senha
 
-        function gera_senhas() {
+        function gera_senhas() { // função que gera a senha com caracteres aleatórios
             const tamanhoStr = tamanhoInput.value.trim();
             const tamanho = Number(tamanhoStr);
 
             if (!tamanhoStr || isNaN(tamanho) || tamanho < 8 || tamanho > 256) {
-                senhaOutput.value = "Valor inválido! Use de 8 a 256 caracteres.";
+                senhaOutput.value = "Valor inválido! Use apenas números entre 8 e 256.";
                 return;
             }
 
@@ -65,13 +67,13 @@
             senhaOutput.value = senha;
         }
 
-        function copiarSenha() {
+        function copiarSenha() { // copia a senha para a área de transferência
             if (!senhaOutput.value || senhaOutput.value.includes("inválido")) {
                 alert("Nada para copiar!");
                 return;
             }
 
-            navigator.clipboard.writeText(senhaOutput.value)
+            navigator.clipboard.writeText(senhaOutput.value) // texto que vai ser copiado
                 .then(() => {
                     botaoCopiar.textContent = "copiado!";
                     setTimeout(() => {
@@ -79,25 +81,24 @@
                     }, 2000);
                 })
                 .catch(err => {
-                    alert("Falha ao copiar: " + err);
+                    alert("Falha ao copiar: " + err); // avisa se tiver algum erro quando copiar
                 });
         }
 
-        // Eventos
-        botaoGerar.addEventListener("click", gera_senhas);
-        botaoCopiar.addEventListener("click", copiarSenha);
+        
+        botaoGerar.addEventListener("click", gera_senhas); // executa a primeira funçao
+        botaoCopiar.addEventListener("click", copiarSenha); // segunda função
 
-        // Enter no input
+        
         tamanhoInput.addEventListener("keydown", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault();
-                gera_senhas();
+                gera_senhas(); // usar o enter pra gerar a senha
             }
         });
 
-        // Garante que o DOM está carregado
-        document.addEventListener("DOMContentLoaded", () => {
-            // Qualquer inicialização extra aqui, se necessário
+        document.addEventListener("DOMContentLoaded", () => { // código roda só depois que o site carrega
+            
         });
     </script>
 
@@ -159,5 +160,4 @@
         
     </style>
 </body>
-
 </html>
